@@ -1,5 +1,5 @@
 function parseQuery(query) {
-    const selectRegex = /SELECT (.+?) FROM (.+?)(?: WHERE (.*))?$/i;
+    const selectRegex = /SELECT (.+?) FROM (.+?)(?:\s+WHERE\s+(.+))?$/i;
     const match = query.match(selectRegex);
 
     if (match) {
