@@ -8,26 +8,27 @@ function parseQuery(query) {
   
     const fields = match[1].split(',').map((field) => field.trim());
     const table = match[2].trim();
-    const whereClause = match[3] ? match[3].trim() : null;
+    const whereString = match[3] ? match[3].trim() : null;
+  
+    const whereClauses = whereString ? parseWhereClause(whereString) : [];
   
     return {
       fields,
       table,
-      whereClause,
+      whereClauses,
     };
   }
   
-
-function parseWhereClause(whereString) {
+  function parseWhereClause(whereString) {
     const conditionRegex = /(.*?)(=|!=|>|<|>=|<=)(.*)/;
-    return whereString.split(/ AND | OR /i).map(conditionString => {
-        const match = conditionString.match(conditionRegex);
-        if (match) {
-            const [, field, operator, value] = match;
-            return { field: field.trim(), operator, value: value.trim() };
-        }
-        throw new Error('Invalid WHERE clause format');
+    return whereString.split(/ AND | OR /i).map((conditionString) => {
+      const match = conditionString.match(conditionRegex);
+      if (match) {
+        const [, field, operator, value] = match;
+        return { field: field.trim(), operator, value: value.trim() };
+      }
+      throw new Error('Invalid WHERE clause format');
     });
-}
-
-module.exports = parseQuery;
+  }
+  
+  module.exports = parseQuery;
