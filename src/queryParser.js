@@ -1,19 +1,20 @@
 function parseQuery(query) {
-    const selectRegex = /SELECT (.+?) FROM (.+?)(?:\s+WHERE\s+(.+))?$/i;
-    const match = query.match(selectRegex);
-    if (match) {
-      const [, fields, table, whereClause] = match;
-      const result = {
-        fields: fields.split(',').map(field => field.trim()),
-        table: table.trim(),
-      };
-      if (whereClause) {
-        result.whereClause = whereClause.trim();
-      }
-      return result;
-    } else {
-      throw new Error('Invalid query format');
+    const regex = /^SELECT (.*?) FROM (.*?)(?: WHERE (.*?))?$/i;
+    const match = query.match(regex);
+  
+    if (!match) {
+      throw new Error('Invalid query');
     }
+  
+    const fields = match[1].split(',').map((field) => field.trim());
+    const table = match[2].trim();
+    const whereClause = match[3] ? match[3].trim() : null;
+  
+    return {
+      fields,
+      table,
+      whereClause,
+    };
   }
   
 

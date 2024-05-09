@@ -50,3 +50,25 @@ test('Execute SQL Query with WHERE Clause', async () => {
     expect(result[0]).toHaveProperty('name');
     expect(result[0].id).toBe('2');
 });
+
+// Test case for an empty result
+test('Execute SQL Query with WHERE Clause (Empty Result)', async () => {
+    const query = 'SELECT id, name FROM sample WHERE age = 100';
+    const result = await executeSELECTQuery(query);
+    expect(result.length).toBe(0);
+  });
+  
+  // Test case for case sensitivity
+  test('Execute SQL Query with WHERE Clause (Case Sensitive)', async () => {
+    const query = 'SELECT id, name FROM sample WHERE name = 'John'';
+    const result = await executeSELECTQuery(query);
+    expect(result.length).toBe(0); // Assuming there are no rows with name 'John' (case sensitive)
+  });
+  
+  // Test case for case insensitivity
+  test('Execute SQL Query with WHERE Clause (Case Insensitive)', async () => {
+    const query = 'SELECT id, name FROM sample WHERE name = 'JOHN'';
+    const result = await executeSELECTQuery(query);
+    expect(result.length).toBe(1); // Assuming there is a row with name 'John' (case insensitive)
+    expect(result[0].name).toBe('John');
+  });
